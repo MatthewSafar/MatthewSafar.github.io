@@ -1,0 +1,311 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu&display=swap');
+
+body {
+    background-color: #202124;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* prevent animations from running on page load */
+body.preload * {
+    animation-duration: 0s !important;
+}
+
+/* ----------------------------------------------------------------------- */
+/* Formatting for all sections */
+/* ----------------------------------------------------------------------- */
+section {
+    height:100vh;
+    max-width: 100%;
+
+    text-align: center;
+
+    color:white;
+}
+
+h1 {
+    font-family: Ubuntu, sans-serif;
+}
+
+/* for two column split content */
+.leftrightcontainer {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    overflow-wrap: break-word;
+    gap: 20px;
+}
+
+.left {
+    flex:1;
+    min-width: 20rem;
+}
+
+.right {
+    flex: 1;
+    min-width: 20rem;
+}
+
+.sizewrapper {
+    max-width: 100%;
+}
+
+.sizewrapper .content {
+    box-sizing: border-box;
+
+    padding:16px;
+    overflow: auto;
+}
+
+/* ----------------------------------------------------------------------- */
+/* Individual section formatting */
+/* ----------------------------------------------------------------------- */
+
+#intro {
+    background-color: #202124;
+}
+
+    #picture {
+        position:relative;
+        height: 50%;
+        background: url("./resources/bg_image.jpg");
+        background-size: cover;
+        border-bottom: #202124 solid 10px;
+    }
+
+    #portrait {
+        position: absolute;
+        border-radius: 100%;
+        border: #202124 solid 10px;
+        background-image: url("./resources/portrait_placeholder.JPG");
+        background-size: contain;
+        height: 156px;
+        width: 156px;
+
+        transform: translate(-50%,-50%);
+        top: 100%;
+        left: 50%;
+    }
+
+    #nav {
+        padding-top:64px;
+        height:50%;
+    }
+
+    #nav a {
+        margin:0 10px 0 10px;
+        display:inline-block;
+        width: 75px;
+        height:75px;
+        border-radius:100%;
+        border:white solid 1px;
+
+        color:white;
+        text-decoration:none;
+        vertical-align: bottom;
+    }
+
+    #nav a:hover {
+        background-color: rgba(255, 255, 255, 0.212);
+        transition: background-color 0.3s;
+    }
+
+    #nav a p {
+        margin-top:50%;
+        transform:translate(0,-50%);
+    }
+
+#about {
+    position: relative;
+    background-color:rgb(48, 11, 11);
+    text-align: left;
+
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+}
+    #about .sizewrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        width: 1024px;
+        
+    }
+
+    #about .sizewrapper .content{
+        background-color: #0d1117;
+        color: #e6edf3;
+        border: #30363d solid 1px;
+        border-radius: 6px;
+    }
+
+    #aboutcontent h1 {
+        margin: 0;
+    }
+
+    #contactbox {
+        border: #30363d solid 1px;
+        border-radius: 6px;
+        padding:0;
+
+        margin:20px 16px 20px 40px;
+        float: right;
+        width: 400px;
+        max-width: 100%;
+
+        overflow:hidden;
+    }
+
+    #contactbox table {
+        width:100%;
+        border-collapse :collapse;
+    }
+
+    #contactbox th,td {
+        border-bottom: #21262d solid 1px;
+    }
+
+    #contactbox th {
+        font-weight: normal;
+        font-style: normal;
+        padding: 8px 16px;
+        background-color: #161b22;
+    }
+
+    #contactbox td:hover {
+        background-color:#161b22;
+    }
+
+    #contactbox td a {
+        font-style: normal;
+        padding: 8px 16px;
+        display: block;
+        text-decoration:none;
+        color:#e6edf3;
+    }
+
+    #contactbox .icon {
+        height: 16px;
+        width: 16px;
+        margin-right: 16px;
+
+        vertical-align: text-bottom;
+    }
+
+#cv {
+    background-color:rgb(73, 44, 24);
+}
+    #cv .sizewrapper {
+        height: 100%;
+    }
+
+    #cv .sizewrapper .content {
+        height:100%;
+        padding:20px;
+    }
+
+    #cveventbox {
+        position:relative;
+        height: 60%;
+    }
+
+    .cvevent {
+        height:100%;
+        display: none;
+    }
+
+    #cvdefault p{
+        font-size:large;
+        position:absolute;
+        transform: translate(-50%,-50%);
+        top:50%;
+        left:50%;
+    }
+
+    #cvtimeline svg {
+        overflow:visible; 
+        width: 80%;
+        /* negotiate height later */
+        height: 40px;
+
+        stroke: white;
+        fill: white;
+
+        margin:auto;
+    }
+
+    #cvtimeline svg.timeline {
+        height:100px;
+    }
+
+    #cvtimeline svg line {
+        stroke-width: 3px;
+    }
+
+    #cvtimeline svg .event {
+        opacity:0.5;
+    }
+
+    #cvtimeline svg .event:hover {
+        opacity: 1;
+    }
+
+    #cvtimeline svg g.event text {
+        display:none;
+        height: 0;
+        opacity: 0;
+        overflow: hidden;
+        text-anchor:middle;
+    }
+
+    #cvtimeline svg g.event text.active {
+        display:initial;
+        height: auto;
+        opacity: 1;
+    }
+
+    #cvtimeline svg g.event text.fade-up {
+        animation: fade-up-out 0.3s ease-in;
+    }
+    #cvtimeline svg g.event text.fade-up.active {
+        animation: fade-up 0.3s ease-in;
+    }
+    #cvtimeline svg g.event text.fade-down {
+        animation: fade-down-out 0.3s ease-in;
+    }
+    #cvtimeline svg g.event text.fade-down.active {
+        animation: fade-down 0.3s ease-in;
+    }
+
+    @keyframes fade-up {
+        from { transform: translateY(20px);
+            opacity: 0;}
+        to {transform: translateY(0);
+            opacity: 1;}
+    }
+    @keyframes fade-up-out {
+        from {transform: translateY(0);
+            opacity: 1;}
+        to {transform: translateY(20px);
+            opacity: 0;}
+    }
+
+    @keyframes fade-down {
+        from {transform: translateY(-20px);
+            opacity: 0;}
+        to {transform: translateY(0);
+            opacity: 1;}
+    }
+    @keyframes fade-down-out {
+        from {transform: translateY(0);
+            opacity: 1;}
+        to {transform: translateY(-20px);
+            opacity: 0;}
+    }
+
+#projects {
+    background-color:rgb(26, 44, 56);
+}
+
+#green {
+    background-color: rgb(1, 51, 1);
+}
