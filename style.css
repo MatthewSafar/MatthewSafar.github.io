@@ -21,6 +21,8 @@ section {
     text-align: center;
 
     color:white;
+
+    overflow: hidden;
 }
 
 h1 {

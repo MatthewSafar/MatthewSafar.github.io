@@ -17,6 +17,11 @@ cveventList = [
 ];
 
 var currentCVevent = -1;
+const currentCVtext = {
+    is_edu: false,
+    l: -1,
+    r: -1,
+} // keeps track of text bounds info for working with overlapping text
 document.getElementById("cvdefault").style.display = 'block';
 constructCVEventTimeline();
 
@@ -105,9 +110,9 @@ function constructCVEventTimeline() {
 
 function getDisplayText(i) {
     if (cveventList[i].start_date.getFullYear() == cveventList[i].end_date.getFullYear()) {
-        return cveventList[i].name + " (" + cveventList[i].end_date.getFullYear() + ")";
+        return cveventList[i].name;
     } else {
-        return cveventList[i].name + " (" + cveventList[i].start_date.getFullYear() + " - " + cveventList[i].end_date.getFullYear() + ")";
+        return cveventList[i].name;
     }
 }
 
@@ -116,31 +121,53 @@ function getDisplayText(i) {
 function onCVEventMouseOver(i) {
     var cvrect = document.getElementById('cveventrect' + i);
     var texttag = cvrect.lastChild;
-    texttag.style.display = null;
-    texttag.classList.add("active");
+    if (currentCVevent != -1 && (cveventList[i].is_education == currentCVtext.is_edu)) {
+        let thisleft = texttag.getBoundingClientRect().left;
+        let thisright = texttag.getBoundingClientRect().right;
+        if ((thisleft > currentCVtext.r && thisright > currentCVtext.r) || (thisright < currentCVtext.l && thisleft < currentCVtext.l)) {
+            console.log("fuck you");
+        } else {
+            texttag.style.display = null;
+            texttag.classList.add("active");
+        }
+    } else {
+        texttag.style.display = null;
+        texttag.classList.add("active");
+    }
 }
 
 function onCVEventMouseExit(i) {
+    if (i != currentCVevent) {
+        removeCVText(i);
+    }
+}
+
+function removeCVText(i) {
     var cvrect = document.getElementById('cveventrect' + i);
     var texttag = cvrect.lastChild;
     texttag.classList.remove("active");
     texttag.style.display = "initial";
-    setTimeout(function() {texttag.style.display = null;},500)
+    setTimeout(function() {texttag.style.display = null;},500); //give it a chance to disappear
 }
 
 function onCVEventClicked(i) {
-    if (currentCVevent != -1) {
+    if (currentCVevent != -1) { // remove old selected
         document.getElementById("cveventrect" + currentCVevent).style.opacity = null;
         document.getElementById("cv"+cveventList[currentCVevent].tag).style.display = null;
+        removeCVText(currentCVevent);
     } else {
         document.getElementById("cvdefault").style.display = null;
     }
 
-    console.log(currentCVevent);
     currentCVevent = i;
+    
     var cvrect = document.getElementById('cveventrect' + currentCVevent);
     var texttag = cvrect.lastChild;
     texttag.classList.add("active");
     cvrect.style.opacity = 1;
     document.getElementById("cv"+cveventList[i].tag).style.display = "block";
+    // update cvtext tracker
+    currentCVtext.is_edu = cveventList[currentCVevent].is_education;
+    currentCVtext.l = texttag.getBoundingClientRect().left;
+    currentCVtext.r = texttag.getBoundingClientRect().right;
 }
