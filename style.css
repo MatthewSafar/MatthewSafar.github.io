@@ -16,13 +16,12 @@ body.preload * {
 /* ----------------------------------------------------------------------- */
 section {
     height:100vh;
+    min-height: max-content;
     max-width: 100%;
 
     text-align: center;
 
     color:white;
-
-    overflow: hidden;
 }
 
 h1 {
@@ -201,18 +200,61 @@ h1 {
     }
 
     #cv .sizewrapper .content {
-        height:100%;
+        height: 100%;
         padding:20px;
     }
 
-    #cveventbox {
+    #cveventbox.sizewrapper {
         position:relative;
         height: 60%;
+        width: 1024px;
+        max-width: 100%;
+        margin:auto;
     }
 
     .cvevent {
-        height:100%;
+        position:absolute;
+        width:100%;
+        opacity:0;
         display: none;
+    }
+
+    .cvevent.active {
+        opacity:1;
+        display: flex;
+    }
+
+    @keyframes fade-out-left {
+        from {opacity: 1;transform:translateX(0);}
+        to {opacity: 0;transform:translateX(-100px);}
+    }
+    @keyframes fade-out-right {
+        from {opacity: 1;transform:translateX(0);}
+        to {opacity: 0;transform:translateX(100px);}
+    }
+
+    .cvevent figure.left {
+        padding-top:16px;
+        padding-bottom:8px;
+        height:95%;
+        box-sizing: border-box;
+        max-width:100%;
+        margin:0;
+        border:0;
+    }
+    .cvevent figure img {
+        height: 100%;
+    }
+
+    .cvevent .eventtext {
+        background-color: #2c1e14;
+        border-radius: 6px;
+        overflow: scroll;
+        text-align: left;
+        padding:16px;
+        height:100%;
+        box-sizing: border-box;
+        margin: 0;
     }
 
     #cvdefault p{
@@ -223,16 +265,53 @@ h1 {
         left:50%;
     }
 
+    #cvtimelinecontainer {
+        width:90%;
+        box-sizing: border-box;
+        margin:auto;
+
+        min-height: 240px;
+    }
+
+    #cvtimelinecontainer .left {
+        flex: 0;
+        min-width:max-content;
+    }
+
+    .timelinelabel {
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        position:relative;
+        height:50%;
+        vertical-align: middle;
+
+        font-size:x-large;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: bold;
+    }
+
+    .timelinelabel img {
+        width: 30px;
+        vertical-align:middle;
+        margin-right:20px;
+    }
+
+    #cvtimeline {
+        overflow-x: scroll;
+        overflow-y:visible;
+        height: 200px;
+        padding: 20px 0;
+    }
+
     #cvtimeline svg {
-        overflow:visible; 
-        width: 80%;
-        /* negotiate height later */
+        overflow:visible;
+        /* negotiate width later */
+        width: 2000px; 
         height: 40px;
 
         stroke: white;
         fill: white;
-
-        margin:auto;
     }
 
     #cvtimeline svg.timeline {
@@ -252,56 +331,42 @@ h1 {
     }
 
     #cvtimeline svg g.event text {
-        display:none;
-        height: 0;
+        visibility:collapse;
         opacity: 0;
         overflow: hidden;
         text-anchor:middle;
+        transition-duration: 0.2s;
+        transition-timing-function: ease-in;
     }
 
-    #cvtimeline svg g.event text.active {
-        display:initial;
-        height: auto;
+    /* there has to be a better way to do this */
+    #cvtimeline svg g.event text.fade-up.active, #cvtimeline svg g.event text.fade-down.active,
+    #cvtimeline svg g.event text.fade-up.activeelevated, #cvtimeline svg g.event text.fade-down.activeelevated {
         opacity: 1;
+        visibility: visible;
     }
 
     #cvtimeline svg g.event text.fade-up {
-        animation: fade-up-out 0.3s ease-in;
+        transform: translateY(20px);
+        transition-property: opacity, transform;
     }
     #cvtimeline svg g.event text.fade-up.active {
-        animation: fade-up 0.3s ease-in;
+        transform: translateY(0);
+        transition-property: opacity, transform;
+    }
+    #cvtimeline svg g.event text.fade-up.activeelevated {
+        transition-property: opacity,transform;
     }
     #cvtimeline svg g.event text.fade-down {
-        animation: fade-down-out 0.3s ease-in;
+        transform: translateY(-20px);
+        transition-property: opacity, transform;
     }
     #cvtimeline svg g.event text.fade-down.active {
-        animation: fade-down 0.3s ease-in;
+        transform: translateY(0);
+        transition-property: opacity, transform;
     }
-
-    @keyframes fade-up {
-        from { transform: translateY(20px);
-            opacity: 0;}
-        to {transform: translateY(0);
-            opacity: 1;}
-    }
-    @keyframes fade-up-out {
-        from {transform: translateY(0);
-            opacity: 1;}
-        to {transform: translateY(20px);
-            opacity: 0;}
-    }
-
-    @keyframes fade-down {
-        from {transform: translateY(-20px);
-            opacity: 0;}
-        to {transform: translateY(0);
-            opacity: 1;}
-    }
-    @keyframes fade-down-out {
-        from {transform: translateY(0);
-            opacity: 1;}
-        to {transform: translateY(-20px);
-            opacity: 0;}
+    #cvtimeline svg g.event text.fade-down.activeelevated {
+        transition-property: opacity, transform;
     }
 
 #projects {

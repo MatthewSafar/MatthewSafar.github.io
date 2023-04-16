@@ -1,6 +1,9 @@
-// run on start
-
-// create events for timeline
+/**
+ * -----------------------------------------------------------------------------
+ * Stuff to run on load
+ * -----------------------------------------------------------------------------
+*/
+// create events for cv timeline
 cveventList = [
     // education
     createCVEvent("BASIS OV HS","2013","2017",true,"BASIS"),
@@ -16,15 +19,22 @@ cveventList = [
     createCVEvent("Job Search","2023-03",null,false,"CARSRC")
 ];
 
+var cvTransitionEventLocked = false;
 var currentCVevent = -1;
 const currentCVtext = {
     is_edu: false,
     l: -1,
     r: -1,
 } // keeps track of text bounds info for working with overlapping text
-document.getElementById("cvdefault").style.display = 'block';
+document.getElementById("cvdefault").classList.add('active');
 constructCVEventTimeline();
 
+
+/**
+ * -----------------------------------------------------------------------------
+ *  Beginning of function defs
+ * -----------------------------------------------------------------------------
+ */
 function createCVEvent(i_name, i_start_date, i_end_date, i_is_education,i_tag) {
     
 
@@ -47,7 +57,7 @@ function createCVEvent(i_name, i_start_date, i_end_date, i_is_education,i_tag) {
 function constructCVEventTimeline() {
     var timelinebox = document.getElementById('cvtimeline');
     var currentDate = new Date();
-    var timelineFirstYear = new Date("2009");
+    var timelineFirstYear = new Date("1999");
     var timelineFinalYear = new Date((currentDate.getUTCFullYear()+1).toString());
     var totalTime = timelineFinalYear.getTime() - timelineFirstYear.getTime();
 
@@ -57,11 +67,11 @@ function constructCVEventTimeline() {
         if (!cveventList[iter].is_education) {
             let startprop = (cveventList[iter].start_date.getTime()-timelineFirstYear.getTime()) / totalTime * 100;
             let endprop = (cveventList[iter].end_date.getTime()-timelineFirstYear.getTime()) / totalTime * 100;
-            html_to_add += `<g class="event" id="cveventrect${iter}">` +
+            html_to_add += `<g class="event" id="cveventrect${iter}" onmouseover="onCVEventMouseOver(${iter})" onmouseout="onCVEventMouseExit(${iter})" onclick="onCVEventClicked(${iter})">` +
             `<line x1="${startprop}%" y1="50%" x2="${startprop}%" y2="100%"/>` +
-            `<rect x="${startprop}%" y="50%" width="${endprop-startprop}%" height="25%" onmouseover="onCVEventMouseOver(${iter})" onmouseout="onCVEventMouseExit(${iter})" onclick="onCVEventClicked(${iter})"/>` +
+            `<rect x="${startprop}%" y="50%" width="${endprop-startprop}%" height="25%"/>` +
             `<line x1="${endprop}%" y1="50%" x2="${endprop}%" y2="100%" />` +
-            `<text x="${(startprop + endprop)/2}%" y="0%" class="fade-down">${getDisplayText(iter)}</text>` +
+            `<text x="${(startprop + endprop)/2}%" y="25%" class="fade-down">${getDisplayText(iter)}</text>` +
             `</g>\n`;
             if (endprop < 0) {
                 console.log(cveventList[iter].name);
@@ -95,9 +105,9 @@ function constructCVEventTimeline() {
         if (cveventList[iter].is_education) {
             let startprop = (cveventList[iter].start_date.getTime()-timelineFirstYear.getTime()) / totalTime * 100;
             let endprop = (cveventList[iter].end_date.getTime()-timelineFirstYear.getTime()) / totalTime * 100;
-            html_to_add += `<g class="event" id="cveventrect${iter}">` +
+            html_to_add += `<g class="event" id="cveventrect${iter}" onmouseover="onCVEventMouseOver(${iter})" onmouseout="onCVEventMouseExit(${iter})" onclick="onCVEventClicked(${iter})">` +
             `<line x1="${startprop}%" y1="0%" x2="${startprop}%" y2="50%"/>` +
-            `<rect x="${startprop}%" y="25%" width="${endprop-startprop}%" height="25%" onmouseover="onCVEventMouseOver(${iter})" onmouseout="onCVEventMouseExit(${iter})" onclick="onCVEventClicked(${iter})"/>` +
+            `<rect x="${startprop}%" y="25%" width="${endprop-startprop}%" height="25%" />` +
             `<line x1="${endprop}%" y1="0%" x2="${endprop}%" y2="50%" />` +
             `<text x="${(startprop + endprop)/2}%" y="100%" class="fade-up">${getDisplayText(iter)}</text>` +
             `</g>\n`;
@@ -106,6 +116,9 @@ function constructCVEventTimeline() {
     html_to_add += "</svg>\n";
 
     timelinebox.innerHTML = html_to_add;
+
+    //scroll to end
+    timelinebox.scrollLeft= timelinebox.scrollWidth;
 }
 
 function getDisplayText(i) {
@@ -119,55 +132,94 @@ function getDisplayText(i) {
 // event handling
 
 function onCVEventMouseOver(i) {
-    var cvrect = document.getElementById('cveventrect' + i);
-    var texttag = cvrect.lastChild;
-    if (currentCVevent != -1 && (cveventList[i].is_education == currentCVtext.is_edu)) {
-        let thisleft = texttag.getBoundingClientRect().left;
-        let thisright = texttag.getBoundingClientRect().right;
-        if ((thisleft > currentCVtext.r && thisright > currentCVtext.r) || (thisright < currentCVtext.l && thisleft < currentCVtext.l)) {
-            console.log("fuck you");
+    if (i != currentCVevent) {
+        let cvrect = document.getElementById('cveventrect' + i);
+        let texttag = cvrect.lastChild;
+        if (currentCVevent != -1 && (cveventList[i].is_education == currentCVtext.is_edu)) {
+            let thisleft = texttag.getBoundingClientRect().left;
+            let thisright = texttag.getBoundingClientRect().right;
+            if (thisleft < currentCVtext.r && thisright > currentCVtext.l) {
+                texttag.classList.add("activeelevated");
+            } else {
+                texttag.classList.add("active");
+            }
         } else {
-            texttag.style.display = null;
             texttag.classList.add("active");
         }
-    } else {
-        texttag.style.display = null;
-        texttag.classList.add("active");
     }
+}
+
+function checkTextOverlap(i) {
+    let cvrect = document.getElementById('cveventrect' + i);
+    let texttag = cvrect.lastChild;
+    
 }
 
 function onCVEventMouseExit(i) {
     if (i != currentCVevent) {
-        removeCVText(i);
+        removeCVLabel(i);
     }
 }
 
-function removeCVText(i) {
-    var cvrect = document.getElementById('cveventrect' + i);
-    var texttag = cvrect.lastChild;
+function removeCVLabel(i) {
+    let cvrect = document.getElementById('cveventrect' + i);
+    let texttag = cvrect.lastChild;
     texttag.classList.remove("active");
-    texttag.style.display = "initial";
-    setTimeout(function() {texttag.style.display = null;},500); //give it a chance to disappear
+    texttag.classList.remove("activeelevated");
 }
 
 function onCVEventClicked(i) {
-    if (currentCVevent != -1) { // remove old selected
-        document.getElementById("cveventrect" + currentCVevent).style.opacity = null;
-        document.getElementById("cv"+cveventList[currentCVevent].tag).style.display = null;
-        removeCVText(currentCVevent);
-    } else {
-        document.getElementById("cvdefault").style.display = null;
+    if (!cvTransitionEventLocked){
+        cvTransitionEventLocked = true;
+        let goLeft = eventIsBefore(currentCVevent,i);
+        let target = null;
+        if (currentCVevent != -1) { // remove old selected
+            document.getElementById("cveventrect" + currentCVevent).style.opacity = null;
+            target = document.getElementById("cv"+cveventList[currentCVevent].tag);
+            removeCVLabel(currentCVevent);
+        } else {
+            target = document.getElementById("cvdefault");
+        }
+        target.classList.remove("active");
+        target.style.display = "flex";
+        target.style.animation = 'none';
+        target.offsetHeight; // trigger reflow
+        if (goLeft) {
+            target.style.animation = "fade-out-left 0.3s ease-in";
+        } else {
+            target.style.animation = "fade-out-right 0.3s ease-in";
+        }
+        setTimeout(function() {target.style.display = null; cvTransitionEventLocked = false; bringInNewcvEvent(i); }, 300); // allow time to disappear
     }
+}
 
+function bringInNewcvEvent(i) {
+    let goLeft = eventIsBefore(currentCVevent,i);
     currentCVevent = i;
-    
-    var cvrect = document.getElementById('cveventrect' + currentCVevent);
-    var texttag = cvrect.lastChild;
+    let cvrect = document.getElementById('cveventrect' + currentCVevent);
+    let texttag = cvrect.lastChild;
+    texttag.classList.remove("activeelevated");
     texttag.classList.add("active");
     cvrect.style.opacity = 1;
-    document.getElementById("cv"+cveventList[i].tag).style.display = "block";
+    let target = document.getElementById("cv"+cveventList[i].tag);
+
+    target.classList.add("active");
+    target.style.animation = 'none';
+    target.offsetHeight; // trigger reflow
+    if (goLeft) {
+        target.style.animation = "fade-out-right 0.3s ease-in reverse";
+    } else {
+        target.style.animation = "fade-out-left 0.3s ease-in reverse";
+    }
     // update cvtext tracker
     currentCVtext.is_edu = cveventList[currentCVevent].is_education;
     currentCVtext.l = texttag.getBoundingClientRect().left;
     currentCVtext.r = texttag.getBoundingClientRect().right;
+}
+
+function eventIsBefore(i,j) {
+    if ((i < 0) || (j < 0)) {
+        return true;
+    }
+    return cveventList[i].start_date <= cveventList[j].start_date;
 }
