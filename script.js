@@ -25,9 +25,11 @@ const currentCVtext = {
     is_edu: false,
     l: -1,
     r: -1,
-} // keeps track of text bounds info for working with overlapping text
+} // keeps track of text bounds info for working with overlapping text in timeline
 document.getElementById("cvdefault").classList.add('active');
 constructCVEventTimeline();
+
+var currentProjectID = "";
 
 
 /**
@@ -224,16 +226,126 @@ function eventIsBefore(i,j) {
     return cveventList[i].start_date <= cveventList[j].start_date;
 }
 
-function filterProjects(thisFilter) {
+function filterAllProjects() {
+    let allFilter = document.getElementById("allPT");
+    let filterList = document.getElementById("projectExplorer").children;
+    if (allFilter.classList.contains("active")) {
+        for (let iter=1; iter<filterList.length; iter++) {
+            if (filterList[iter].classList.contains("active")) {
+                toggleProjectTag(filterList[iter]);
+            }
+        }
+        allFilter.classList.remove("active");
+        allFilter.firstChild.checked = false;
+    } else {
+        for (let iter=1; iter<filterList.length; iter++) {
+            if (!filterList[iter].classList.contains("active")) {
+                toggleProjectTag(filterList[iter]);
+            }
+        }
+        allFilter.classList.add("active");
+        allFilter.firstChild.checked = true;
+    }
+    
+}
+
+function toggleProjectTag(thisFilter) {
+    let addedTag;
     if (thisFilter.classList.contains("active")) {
         thisFilter.classList.remove("active");
         thisFilter.firstChild.checked = false;
 
         // remove filter from projectviewer
+        projectViewer = document.getElementById("projectList");
+        let children = projectViewer.children;
+        for (let iter = 0; iter < children.length; iter++) {
+            if (children[iter].classList.contains("projectbutton") && children[iter].classList.contains(thisFilter.id)) {
+                children[iter].style.display = null;
+            }
+        }
+        addedTag = false;
     } else {
         thisFilter.classList.add("active");
         thisFilter.firstChild.checked = true;
 
         // apply filter to projectViewer
+        // remove filter from projectviewer
+        projectViewer = document.getElementById("projectList");
+        let children = projectViewer.children;
+        for (let iter = 0; iter < children.length; iter++) {
+            if (children[iter].classList.contains("projectbutton") && children[iter].classList.contains(thisFilter.id)) {
+                children[iter].style.display = "block";
+            }
+        }
+        addedTag = true;
     }
+    return addedTag;
+}
+
+function filterProjects(thisFilter) {
+    let addedTag = toggleProjectTag(thisFilter);
+
+    //check all filter
+    let allFilter = document.getElementById("allPT");
+    if (addedTag) {
+        let toggleAll = true;
+        let filterList = document.getElementById("projectExplorer").children;
+        for (let iter = 1; iter < filterList.length; iter++) {
+            if (!filterList[iter].classList.contains("active")) {
+                toggleAll = false;
+                break;
+            }
+        }
+        if (toggleAll) {
+            allFilter.classList.add("active");
+            allFilter.firstChild.checked = true;
+        }
+    } else {
+        if (allFilter.classList.contains("active")) {
+            allFilter.classList.remove("active");
+            allFilter.firstChild.checked = false;
+        }
+    }
+}
+
+function revealProjectContent(thisProject) {
+    // remove project list
+    let plist = document.getElementById("projectList");
+    plist.style.animation = "fade-out 0.1s ease-in";
+    let projectcontent = document.getElementById(thisProject.id + "C");
+    setTimeout(function() {plist.style.display = "none";
+        // add relevant project content
+        document.getElementById("projectViewer").style.overflowX = "hidden";
+        projectcontent.style.display = "block";
+        projectcontent.style.animation = null;
+        projectcontent.offsetHeight;
+        projectcontent.style.animation = "fade-out-right-short 0.1s ease-in reverse";
+        currentProjectID = thisProject.id + "C";
+        setTimeout(function() {document.getElementById("projectViewer").style.overflowX = null;}, 100);
+    }, 100);
+
+}
+
+function exitCurrentProject() {
+    let plist = document.getElementById("projectList");
+    console.log(currentProjectID);
+    let projectcontent = document.getElementById(currentProjectID);
+
+    document.getElementById("projectViewer").style.overflowX = "hidden";
+    projectcontent.style.animation = null;
+    projectcontent.offsetHeight;
+    projectcontent.style.animation = "fade-out-right-short 0.1s ease-out";
+    setTimeout(function() {
+        // add relevant project content
+        document.getElementById("projectViewer").style.overflowX = null;
+        projectcontent.style.display = null;
+        currentProjectID = "";
+
+        // add project list
+        plist.style.display = null;
+        plist.style.animation = null;
+        plist.offsetHeight;
+        plist.style.animation = "fade-out 0.1s ease-in reverse";
+    }, 100);
+    
 }

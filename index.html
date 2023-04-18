@@ -159,16 +159,25 @@
                 <div class="leftrightcontainer">
                     <div class="left" id="projectExplorer">
                         <!-- ids in this section correspond to tags that get revealed on click -->
-                        <div class="projectTag" id="work" onclick="filterProjects(this)"><input type=checkbox> Work</div>
-                        <div class="projectTag" id="academic" onclick="filterProjects(this)"><input type=checkbox> Academia</div>
-                        <div class="projectTag" id="volunteer" onclick="filterProjects(this)"><input type=checkbox> Volunteering</div>
+                        <div class="projectTag" id="allPT" onclick="filterAllProjects()"><input type=checkbox> All</div>
+                        <div class="projectTag" id="workPT" onclick="filterProjects(this)"><input type=checkbox> Work</div>
+                        <div class="projectTag" id="academicPT" onclick="filterProjects(this)"><input type=checkbox> Academia</div>
+                        <div class="projectTag" id="volunteerPT" onclick="filterProjects(this)"><input type=checkbox> Volunteering</div>
+                        <div class="projectTag" id="funPT" onclick="filterProjects(this)"><input type=checkbox> Fun</div>
                     </div>
                     <div class="right" id="projectViewer">
                         <!-- add tags to class after "projectbutton" id should correspond to content div -->
-                        <div class="projectbutton work" id="hireme"><svg><polygon points="0,0 8,4 0,8" /></svg>Please hire me!</div>
-                        <div class="projectText" id="hiremeText">Hey, please hire me!</div>
-                        <div class="projectbutton academic" id="bnpfret"><svg><polygon points="0,0 8,4 0,8" /></svg>BNP-FRET Paper series</div>
-                        
+                        <div id="projectList">
+                            <div class="projectbutton workPT" id="hiremeP" onclick="revealProjectContent(this)"><svg><polygon points="0,0 8,4 0,8" /></svg>Please hire me!</div>
+                            <div class="projectbutton academicPT" id="bnpfretP"><svg><polygon points="0,0 8,4 0,8" /></svg>BNP-FRET Paper series</div>
+                        </div>
+                        <div class="projectContent" id="hiremePC">
+                            <h3>
+                                <img src="./resources/back-icon.svg" onclick="exitCurrentProject()" /> Please Hire Me!
+                            </h3>
+                            <hr>
+                            <p>Hey, please hire me!</p>
+                        </div>
                     </div>
                 </div>
             </div>
