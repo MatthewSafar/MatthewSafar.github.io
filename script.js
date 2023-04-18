@@ -223,3 +223,17 @@ function eventIsBefore(i,j) {
     }
     return cveventList[i].start_date <= cveventList[j].start_date;
 }
+
+function filterProjects(thisFilter) {
+    if (thisFilter.classList.contains("active")) {
+        thisFilter.classList.remove("active");
+        thisFilter.firstChild.checked = false;
+
+        // remove filter from projectviewer
+    } else {
+        thisFilter.classList.add("active");
+        thisFilter.firstChild.checked = true;
+
+        // apply filter to projectViewer
+    }
+}

@@ -324,6 +324,7 @@ h1 {
 
     #cvtimeline svg .event {
         opacity:0.5;
+        cursor:pointer;
     }
 
     #cvtimeline svg .event:hover {
@@ -337,6 +338,7 @@ h1 {
         text-anchor:middle;
         transition-duration: 0.2s;
         transition-timing-function: ease-in;
+
     }
 
     /* there has to be a better way to do this */
@@ -370,8 +372,103 @@ h1 {
     }
 
 #projects {
+    position:relative;
     background-color:rgb(26, 44, 56);
 }
+    #projects .sizewrapper {
+        width:1024px;
+
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform: translate(-50%,-50%);
+    }
+
+    #projects .sizewrapper .content {
+        border-radius: 6px;
+        background-color: #161b22;
+
+        display:flex;
+        flex-direction:column;
+
+        height: 560px;
+    }
+
+    #projects h3 {
+        flex:0;
+        background-color: #0d1117;
+        margin:0;
+        width: 200px;
+        padding:10px 0;
+    }
+
+    #projects .leftrightcontainer {
+        flex:1;
+        background-color: #0d1117;
+        gap:0;
+    }
+
+    #projectExplorer.left, #projectViewer.right {
+        background-color:#202124;
+        overflow:scroll;
+        box-sizing: border-box;
+        border:#0d1117 solid 10px;
+        text-align: left;
+        padding: 8px 16px 16px 16px;
+    }
+
+    #projectExplorer.left {
+        flex: 0;
+        border-right: none;
+    }
+
+    #projectExplorer .projectTag {
+        cursor:pointer;
+        display: block;
+        margin-top: 8px;
+        background-color: #21262d;
+        border: none;
+        border-radius: 6px;
+        font-size: larger;
+        padding:12px;
+        box-sizing:border-box;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    #projectExplorer .projectTag:hover, #projectExplorer .projectTag.active {
+        background-color: #30363d;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    #projectExplorer .projectTag input[type = "checkbox"] {
+        vertical-align: text-top;
+    }
+
+    .projectbutton {
+        padding: 8px;
+        border-bottom:#30363d solid 1px;
+        cursor:pointer;
+    }
+
+    .projectbutton:last-child {
+        border: none;
+    }
+
+    .projectbutton:hover {
+        background-color: #30363d;
+    }
+
+    .projectbutton svg {
+        width:8px;
+        height:8px;
+        fill:white;
+        vertical-align: middle;
+        margin-right: 16px;
+    }
+
+    .projectText {
+        display: none;
+    }
 
 #green {
     background-color: rgb(1, 51, 1);

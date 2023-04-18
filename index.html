@@ -74,6 +74,19 @@
                 <div class="content cvevent" id="cvdefault">
                     <p>Click events on the timeline to see my past!</p>
                 </div>
+                <!-- [template] id should correspond to id in script.js declaration
+                <div class="content leftrightcontainer cvevent" id="cvBASIS">
+                <figure class="left">
+                    <img src="./resources/basis-ov-building.jpg" alt="Basis OV Building" loading="lazy">
+                    <figcaption>My highschool in Oro Valley, AZ.</figcaption>
+                </figure>
+                <div class="right eventtext">
+                    <h3>BASIS Oro Valley High School</h1>
+                    <p>High School (2013 - 2017)</p>
+                    <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi lacinia nibh lectus, vitae interdum nunc pulvinar in. Sed ex lorem, feugiat nec mi eu, tincidunt tempus ligula. Praesent lorem enim, molestie tincidunt tempor vel, aliquam et odio. Mauris sit amet ipsum pulvinar, sagittis est sed, mattis velit. Pellentesque congue lobortis tristique. In cursus lacus massa, vel tincidunt risus molestie sit amet. Phasellus vehicula congue tincidunt.</p>
+                </div>
+                </div>
+                 -->
                 <div class="content leftrightcontainer cvevent" id="cvBASIS">
                     <figure class="left">
                         <img src="./resources/basis-ov-building.jpg" alt="Basis OV Building" loading="lazy">
@@ -139,7 +152,28 @@
         </div>
         </div> 
     </section>
-    <section id="projects"><h1>Projects</h1></section>
+    <section id="projects">
+        <div class="sizewrapper">
+            <div class="content">
+                <h3>Projects</h3>
+                <div class="leftrightcontainer">
+                    <div class="left" id="projectExplorer">
+                        <!-- ids in this section correspond to tags that get revealed on click -->
+                        <div class="projectTag" id="work" onclick="filterProjects(this)"><input type=checkbox> Work</div>
+                        <div class="projectTag" id="academic" onclick="filterProjects(this)"><input type=checkbox> Academia</div>
+                        <div class="projectTag" id="volunteer" onclick="filterProjects(this)"><input type=checkbox> Volunteering</div>
+                    </div>
+                    <div class="right" id="projectViewer">
+                        <!-- add tags to class after "projectbutton" id should correspond to content div -->
+                        <div class="projectbutton work" id="hireme"><svg><polygon points="0,0 8,4 0,8" /></svg>Please hire me!</div>
+                        <div class="projectText" id="hiremeText">Hey, please hire me!</div>
+                        <div class="projectbutton academic" id="bnpfret"><svg><polygon points="0,0 8,4 0,8" /></svg>BNP-FRET Paper series</div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <section id="green"><h1>Green</h1></section>
 </body>
 </html>
