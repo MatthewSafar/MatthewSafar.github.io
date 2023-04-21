@@ -30,6 +30,7 @@ document.getElementById("cvdefault").classList.add('active');
 constructCVEventTimeline();
 
 var currentProjectID = "";
+filterAllProjects();
 
 
 /**
